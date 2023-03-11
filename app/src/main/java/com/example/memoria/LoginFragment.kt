@@ -1,10 +1,17 @@
 package com.example.memoria
 
+import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.memoria.databinding.FragmentAuthBinding
 
@@ -32,7 +39,22 @@ class AuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.logInButton.setOnClickListener {
+        val register_prompt = SpannableString("Don't have an account? Register")
+        val registerClickable : ClickableSpan = object : ClickableSpan() {
+            override fun onClick(p0: View) {
+                val testToast = Toast.makeText(context, "Test button!", Toast.LENGTH_LONG)
+                testToast.show()
+            }
+        }
+
+        register_prompt.setSpan(registerClickable, 23, 31, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        val textView = view.findViewById<TextView>(R.id.register_prompt)
+        textView.text = register_prompt
+        textView.movementMethod = LinkMovementMethod.getInstance()
+
+
+        binding.loginButton.setOnClickListener() {
             findNavController().navigate(R.id.action_AuthFragment_to_FeedFragment)
         }
     }
