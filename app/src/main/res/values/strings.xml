@@ -19,5 +19,7 @@
     <string name="back">Back</string>
     <string name="form_title">New Post</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
 
 </resources>
