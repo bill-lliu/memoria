@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.memoria.databinding.FragmentLoginBinding
 
@@ -48,7 +47,7 @@ class LoginFragment : Fragment() {
 
         register_prompt.setSpan(registerClickable, 23, 31, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        val textView = view.findViewById<TextView>(R.id.register_prompt)
+        val textView = view.findViewById<TextView>(R.id.registerPrompt)
         textView.text = register_prompt
         textView.movementMethod = LinkMovementMethod.getInstance()
 
