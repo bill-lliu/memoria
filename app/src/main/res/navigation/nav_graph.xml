@@ -45,5 +45,9 @@
         android:id="@+id/registerFragment"
         android:name="com.example.memoria.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" />
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment_to_FeedFragment"
+            app:destination="@id/FeedFragment" />
+    </fragment>
 </navigation>
