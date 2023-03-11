@@ -1,6 +1,5 @@
 package com.example.memoria
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -13,14 +12,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
-import com.example.memoria.databinding.FragmentAuthBinding
+import com.example.memoria.databinding.FragmentLoginBinding
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class AuthFragment : Fragment() {
+class LoginFragment : Fragment() {
 
-    private var _binding: FragmentAuthBinding? = null
+    private var _binding: FragmentLoginBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -31,7 +30,7 @@ class AuthFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentAuthBinding.inflate(inflater, container, false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -42,8 +41,8 @@ class AuthFragment : Fragment() {
         val register_prompt = SpannableString("Don't have an account? Register")
         val registerClickable : ClickableSpan = object : ClickableSpan() {
             override fun onClick(p0: View) {
-                val testToast = Toast.makeText(context, "Test button!", Toast.LENGTH_LONG)
-                testToast.show()
+                findNavController().navigate(R.id.action_LoginFragment_to_registerFragment)
+
             }
         }
 
