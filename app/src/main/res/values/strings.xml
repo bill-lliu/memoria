@@ -13,13 +13,16 @@
     <string name="memoria">Memoria</string>
     <string name="log_in_prompt">Please Log In to Continue</string>
     <string name="log_out">Log Out</string>
-    <string name="log_in">Log In</string>
+    <string name="log_in">Login</string>
     <string name="feed">Feed</string>
     <string name="new_post_button">New Post</string>
     <string name="back">Back</string>
     <string name="form_title">New Post</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="username_hint">Username</string>
-    <string name="password_hint">Password</string>
+    <string name="username_hint">abcd1234</string>
+    <string name="password_hint">********</string>
+    <string name="login_user">Username</string>
+    <string name="login_pass">Password</string>
+
 
 </resources>
