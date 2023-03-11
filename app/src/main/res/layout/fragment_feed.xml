@@ -35,4 +35,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textview_second" />
+
+    <android.widget.SearchView
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
+        android:layout_margin="12dp"
+        android:queryHint="Search here"
+        app:layout_constraintTop_toBottomOf="@id/log_out_button" />
+
+    <!-- TODO: add feed post rendering here -->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
