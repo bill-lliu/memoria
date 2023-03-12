@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.memoria.databinding.FragmentAuthBinding
+import com.example.memoria.databinding.FragmentLoginBinding
 import com.example.memoria.databinding.FragmentFormBinding
 
 // TODO: Rename parameter arguments, choose names that match

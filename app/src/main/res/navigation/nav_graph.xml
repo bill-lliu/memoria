@@ -3,17 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/AuthFragment">
+    app:startDestination="@id/LoginFragment">
 
     <fragment
-        android:id="@+id/AuthFragment"
-        android:name="com.example.memoria.AuthFragment"
+        android:id="@+id/LoginFragment"
+        android:name="com.example.memoria.LoginFragment"
         android:label="@string/auth_fragment_label"
-        tools:layout="@layout/fragment_auth">
+        tools:layout="@layout/fragment_login">
 
         <action
             android:id="@+id/action_AuthFragment_to_FeedFragment"
             app:destination="@id/FeedFragment" />
+        <action
+            android:id="@+id/action_LoginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
     </fragment>
     <fragment
         android:id="@+id/FeedFragment"
@@ -23,7 +26,7 @@
 
         <action
             android:id="@+id/action_FeedFragment_to_AuthFragment"
-            app:destination="@id/AuthFragment" />
+            app:destination="@id/LoginFragment" />
         <action
             android:id="@+id/action_FeedFragment_to_FormFragment"
             app:destination="@id/FormFragment" />
@@ -37,5 +40,17 @@
         <action
             android:id="@+id/action_FormFragment_to_FeedFragment"
             app:destination="@id/FeedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.memoria.RegisterFragment"
+        android:label="Register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment_to_FeedFragment"
+            app:destination="@id/FeedFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
     </fragment>
 </navigation>
