@@ -10,9 +10,7 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="141dp"
         android:layout_marginTop="150dp"
-        android:layout_marginEnd="142dp"
         android:layout_marginBottom="6dp"
         android:text="@string/memoria"
         android:textSize="32sp"
@@ -27,7 +25,7 @@
         android:id="@+id/loginPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/log_in_prompt"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -37,12 +35,11 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginPrompt">
 
@@ -51,16 +48,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato"
-            android:text="@string/login_user"
+            android:text="@string/username"
             android:textColor="#000000"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/loginUsername"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="51dp"
             android:layout_marginBottom="16dp"
-            android:width="900px"
             android:background="@drawable/rounded_corner"
             android:fontFamily="@font/lato"
             android:hint="@string/username_hint"
@@ -72,13 +68,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato"
-            android:text="@string/login_pass"
+            android:text="@string/password"
             android:textColor="#000000"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/loginPassword"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="49dp"
             android:layout_marginBottom="8dp"
             android:width="900px"
@@ -89,21 +85,39 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/registerPrompt"
+            android:id="@+id/forgotPassword"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:fontFamily="@font/lato" />
+            android:layout_height="wrap_content"
+            android:text="@string/forgotPassword"
+            android:textAlignment="textEnd"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/loginButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="300dp"
-            android:width="900px"
-
             android:background="@drawable/rounded_corner"
             android:text="@string/log_in" />
 
+        <TextView
+            android:id="@+id/registerPrompt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/lato"
+            android:textAlignment="center" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

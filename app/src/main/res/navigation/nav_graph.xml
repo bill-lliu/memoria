@@ -49,5 +49,8 @@
         <action
             android:id="@+id/action_registerFragment_to_FeedFragment"
             app:destination="@id/FeedFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
     </fragment>
 </navigation>

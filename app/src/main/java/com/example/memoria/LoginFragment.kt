@@ -22,6 +22,8 @@ import com.example.memoria.databinding.FragmentLoginBinding
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
+    private var username: EditText? = null
+    private var password: EditText? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -40,10 +42,11 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        username = view.findViewById(R.id.loginUsername)
+        password = view.findViewById<EditText>(R.id.loginPassword)
+
         setupRegisterPrompt(view)
-
-
-
+        setupForgotPassword(view)
 
         binding.loginButton.setOnClickListener() {
             val toast = Toast.makeText(context, "Please enter username and/or password!", Toast.LENGTH_LONG)
@@ -59,17 +62,18 @@ class LoginFragment : Fragment() {
     }
 
     private fun checkFieldValues(view: View) : Boolean {
-        val usernameField = view.findViewById<EditText>(R.id.loginUsername)
-        val passwordField = view.findViewById<EditText>(R.id.loginPassword)
-        val username = usernameField.text.toString()
-        val password = passwordField.text.toString()
+        val usernameText = username?.text.toString()
+        val passwordText = password?.text.toString()
 
         // Check for valid characters in username
+        if (usernameText.contains("^.*[^a-zA-Z\\d].*$".toRegex())){
+            return false
+        }
 
         // Check for valid characters in password
 
         // Check if username and password are non-empty
-        if (username.isNotEmpty() && password.isNotEmpty()){
+        if (usernameText.isNotEmpty() && passwordText.isNotEmpty()){
             return true
         }
 
@@ -90,6 +94,21 @@ class LoginFragment : Fragment() {
         val textView = view.findViewById<TextView>(R.id.registerPrompt)
         textView.text = registerPrompt
         textView.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun setupForgotPassword(view: View) {
+        val passwordPrompt = SpannableString("Forgot Password?")
+        val passwordClickable : ClickableSpan = object : ClickableSpan() {
+            override fun onClick(p0: View) {
+
+            }
+        }
+
+        passwordPrompt.setSpan(passwordClickable, 0, 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val textView = view.findViewById<TextView>(R.id.forgotPassword)
+        textView.text = passwordPrompt
+        textView.movementMethod = LinkMovementMethod.getInstance()
+
     }
 
     override fun onDestroyView() {
