@@ -11,12 +11,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.memoria.databinding.FragmentFeedBinding
+import com.example.memoria.FormViewModel
 
 
 /**
@@ -35,6 +39,7 @@ class FeedFragment : Fragment() {
 
     private val channelId = "channel1"
     private val notificationId = 1
+    private val viewModel: FormViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,6 +72,16 @@ class FeedFragment : Fragment() {
         binding.notifButton2.setOnClickListener {
             sendNotification(1)
         }
+
+        //Observe form to update feed when post is created
+        viewModel.postMade.observe(viewLifecycleOwner, Observer { _ ->
+            binding.textviewSecond.visibility = View.INVISIBLE
+            binding.card.visibility = View.VISIBLE
+            binding.formEntryButton.isClickable = false
+            binding.formEntryButton.alpha = .5f
+            val toast = Toast.makeText(context, "Post created!", Toast.LENGTH_LONG)
+            toast.show()
+        })
     }
 
     override fun onDestroyView() {
