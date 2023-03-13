@@ -14,7 +14,7 @@
     <string name="log_in_prompt">Please Log In to Continue</string>
     <string name="log_out">Log Out</string>
     <string name="log_in">Login</string>
-    <string name="feed">Feed</string>
+    <string name="feed">Welcome to Memoria! Start by making your first post!</string>
     <string name="new_post_button">New Post</string>
     <string name="back">Back</string>
     <string name="form_title">New Post</string>
@@ -32,5 +32,8 @@
     <string name="forgotPassword">Forgot Password?</string>
     <string name="password_min">Min. 8 characters</string>
 
+    <string name="demo_title">Welcome To Memoria!</string>
+    <string name="demo_description">My first Memoria post! Nice sunset :)</string>
+    <string name="demo_tags">Tags: sunset, first</string>
 
 </resources>
