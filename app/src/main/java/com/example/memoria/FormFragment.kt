@@ -1,5 +1,6 @@
 package com.example.memoria
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap
+import android.provider.MediaStore
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat.checkSelfPermission
 import com.example.memoria.databinding.FragmentLoginBinding
 import com.example.memoria.databinding.FragmentFormBinding
 import com.example.memoria.FormViewModel
@@ -35,7 +42,6 @@ class FormFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: FormViewModel by activityViewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -60,7 +66,41 @@ class FormFragment : Fragment() {
             findNavController().navigate(R.id.action_FormFragment_to_FeedFragment)
         }
 
+        val imageView = view.findViewById<ImageView>(R.id.picture)
+        val getAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            val bitmap = it?.data?.extras?.get("data") as Bitmap
+            imageView.setImageBitmap(bitmap)
+        }
+
+        binding.takePicture.setOnClickListener{
+            if (checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED){
+                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                if (cameraIntent.resolveActivity(requireContext().packageManager) != null) {
+                    getAction.launch(cameraIntent)
+                }
+            } else{
+                //TODO: something probably needs to go here, idk what, send help probably a call to
+                // requestPermissions()
+            }
+
+        }
+
+        binding.cameraroll.setOnClickListener{
+            if(checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED){
+                val storageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                if(storageIntent.resolveActivity(requireContext().packageManager) != null){
+                    getAction.launch(storageIntent)
+                }
+            }else {
+                //TODO: something probably needs to go here, idk what, send help probably a call to
+                // requestPermissions()
+            }
+        }
+
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
