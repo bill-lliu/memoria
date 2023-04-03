@@ -56,7 +56,6 @@ class RegisterFragment : Fragment() {
 
         username = view.findViewById(R.id.registerUsername)
         password = view.findViewById<EditText>(R.id.registerPassword)
-        email = view.findViewById<EditText>(R.id.registerEmail)
 
         setupLoginPrompt(view)
 
@@ -82,7 +81,10 @@ class RegisterFragment : Fragment() {
             return false
         }
 
-        // Check for valid characters in password
+        // Check for valid characters in password and for valid length
+        if (passwordText.length < 8 && !passwordText.contains("!#\$%^&*?".toRegex())){
+            return false
+        }
 
         // Check if username and password are non-empty
         if (usernameText.isNotEmpty() && passwordText.isNotEmpty() && emailText.isNotEmpty()){

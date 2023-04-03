@@ -70,7 +70,7 @@ class LoginFragment : Fragment() {
             return false
         }
 
-        // Check for valid characters in password
+
 
         // Check if username and password are non-empty
         if (usernameText.isNotEmpty() && passwordText.isNotEmpty()){
