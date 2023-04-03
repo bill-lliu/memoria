@@ -10,7 +10,7 @@ import androidx.room.RoomDatabase
     version = 1
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun getUserDao() : UserDAO
+    abstract fun getUserDao() : UserDao
 
     companion object {
         @Volatile
