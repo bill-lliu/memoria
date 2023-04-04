@@ -1,5 +1,6 @@
 package com.example.memoria
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -11,11 +12,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.memoria.databinding.FragmentFormBinding
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -69,6 +72,12 @@ class FormFragment : Fragment() {
             imageView.setImageBitmap(bitmap)
         }
 
+        val requestCamera = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it) {
+                Toast.makeText(context, "Permission not Granted", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         binding.takePicture.setOnClickListener{
             if (checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED){
@@ -77,8 +86,15 @@ class FormFragment : Fragment() {
                     getAction.launch(cameraIntent)
                 }
             } else{
-                //TODO: something probably needs to go here, idk what, send help probably a call to
-                // requestPermissions()
+//                ActivityCompat.requestPermissions(requireActivity(),
+//                     arrayOf<String>{Manifest.permission.CAMERA},
+//                    PERMISSION_REQUEST_CODE);
+//
+//                ActivityCompat.requestPermissions(
+//                    (context as Activity?)!!, arrayOf<String>(Manifest.permission.CAMERA),
+//                    MY_PERMISSIONS_REQUEST_CAMERA
+//                )
+                requestCamera.launch(android.Manifest.permission.CAMERA)
             }
 
         }
