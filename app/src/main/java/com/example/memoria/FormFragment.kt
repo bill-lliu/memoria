@@ -76,6 +76,26 @@ class FormFragment : Fragment() {
             if (!it) {
                 Toast.makeText(context, "Permission not Granted", Toast.LENGTH_SHORT).show()
             }
+            else{
+                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                if (cameraIntent.resolveActivity(requireContext().packageManager) != null) {
+                    getAction.launch(cameraIntent)
+                }
+
+            }
+        }
+
+        val requestStorage = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it) {
+                Toast.makeText(context, "Permission not Granted", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                val storageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                if(storageIntent.resolveActivity(requireContext().packageManager) != null){
+                    getAction.launch(storageIntent)
+                }
+
+            }
         }
 
         binding.takePicture.setOnClickListener{
@@ -86,15 +106,8 @@ class FormFragment : Fragment() {
                     getAction.launch(cameraIntent)
                 }
             } else{
-//                ActivityCompat.requestPermissions(requireActivity(),
-//                     arrayOf<String>{Manifest.permission.CAMERA},
-//                    PERMISSION_REQUEST_CODE);
-//
-//                ActivityCompat.requestPermissions(
-//                    (context as Activity?)!!, arrayOf<String>(Manifest.permission.CAMERA),
-//                    MY_PERMISSIONS_REQUEST_CAMERA
-//                )
                 requestCamera.launch(android.Manifest.permission.CAMERA)
+
             }
 
         }
@@ -102,15 +115,14 @@ class FormFragment : Fragment() {
         binding.cameraroll.setOnClickListener{
             if(checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED){
+                //TODO: need to update the way to grab image from external media
                 val storageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 if(storageIntent.resolveActivity(requireContext().packageManager) != null){
                     getAction.launch(storageIntent)
                 }
             }else {
-                //TODO: something probably needs to go here, idk what, send help probably a call to
-                // requestPermissions()
-                val myToast: Toast = Toast.makeText(context, "Hello", Toast.LENGTH_LONG)
-                myToast.show()
+
+                requestStorage.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
             }
         }
 
