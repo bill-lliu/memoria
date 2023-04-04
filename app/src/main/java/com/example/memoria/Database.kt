@@ -7,11 +7,12 @@ import androidx.room.RoomDatabase
 import java.io.File
 
 @Database(
-    entities = [User::class],
+    entities = [User::class, Post::class],
     version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getUserDao() : UserDao
+    abstract fun getPostDao() : PostDao
     companion object {
         private var instance: AppDatabase? = null
 
