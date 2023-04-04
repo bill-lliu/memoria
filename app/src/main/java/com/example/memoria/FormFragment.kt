@@ -1,10 +1,12 @@
 package com.example.memoria
 
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.opengl.Visibility
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +14,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.memoria.databinding.FragmentFormBinding
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -36,6 +42,8 @@ class FormFragment : Fragment() {
     private var param2: String? = null
 
     private var _binding: FragmentFormBinding? = null
+    private lateinit var dao: PostDao
+    private var currentPhotoPath: String = ""
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -44,6 +52,7 @@ class FormFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        dao = AppDatabase.getInstance(requireContext()).getPostDao()
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -62,14 +71,22 @@ class FormFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.backToFeedButton.setOnClickListener {
-            viewModel.makePost()
-            findNavController().navigate(R.id.action_FormFragment_to_FeedFragment)
+            if(checkValidPost()) {
+                viewModel.makePost()
+                findNavController().navigate(R.id.action_FormFragment_to_FeedFragment)
+            }
         }
 
         val imageView = view.findViewById<ImageView>(R.id.picture)
         val getAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            val bitmap = it?.data?.extras?.get("data") as Bitmap
+            //val bitmap = it?.data?.extras?.get("data") as Bitmap
+            val image: File = File(currentPhotoPath)
+            val bmOptions: BitmapFactory.Options = BitmapFactory.Options()
+            var bitmap: Bitmap? = BitmapFactory.decodeFile(image.absolutePath, bmOptions)
+            //bitmap =
+                //Bitmap.createScaledBitmap(bitmap!!, parent.getWidth(), parent.getHeight(), true)
             imageView.setImageBitmap(bitmap)
+            imageView.visibility = View.VISIBLE
         }
 
         val requestCamera = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -103,11 +120,19 @@ class FormFragment : Fragment() {
                 == PackageManager.PERMISSION_GRANTED){
                 val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 if (cameraIntent.resolveActivity(requireContext().packageManager) != null) {
+                    val filePath = createImageFile()
+                    val imageUri = context?.let { it1 ->
+                        FileProvider.getUriForFile(
+                            it1,
+                            "com.example.memoria.example.provider",
+                            filePath)
+                    };
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
                     getAction.launch(cameraIntent)
+                    //println(currentPhotoPath)
                 }
             } else{
                 requestCamera.launch(android.Manifest.permission.CAMERA)
-
             }
 
         }
@@ -132,6 +157,62 @@ class FormFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+
+    private fun checkValidPost(): Boolean{
+        val titleField = binding.editTitleContainer
+        val descriptionField = binding.editDescriptionContainter
+        val tagField = binding.editTagsContainer
+        val titleFieldText = binding.editTitle
+        val descriptionFieldText = binding.editDescription
+        val tagFieldText = binding.editTags
+
+
+        if (titleFieldText.text.toString() == ""){
+            titleField.isErrorEnabled = true
+            titleField.error = "Post must have a title"
+            return false
+        }
+        else {
+            titleField.isErrorEnabled = false
+        }
+        if(currentPhotoPath == ""){
+            val toast = Toast.makeText(context, "Post must have an image", Toast.LENGTH_LONG)
+            toast.show()
+            return false
+        }
+        if (tagFieldText.text.toString() == ""){
+            tagField.isErrorEnabled = true
+            tagField.error = "Post must have tags"
+            return false
+        }
+        else {
+            tagField.isErrorEnabled = false
+        }
+        if (descriptionFieldText.text.toString() == ""){
+            descriptionField.isErrorEnabled = true
+            descriptionField.error = "Post must have a description"
+            return false
+        }
+        else {
+            descriptionField.isErrorEnabled = false
+        }
+        return true
     }
 
     companion object {

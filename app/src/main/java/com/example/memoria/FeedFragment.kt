@@ -29,6 +29,8 @@ import com.example.memoria.FormViewModel
 class FeedFragment : Fragment() {
 
     private var _binding: FragmentFeedBinding? = null
+    private lateinit var dao: PostDao
+
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -38,6 +40,11 @@ class FeedFragment : Fragment() {
     private var filteredPosts: List<Post>? = null
     
     private val viewModel: FormViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        dao = AppDatabase.getInstance(requireContext()).getPostDao()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

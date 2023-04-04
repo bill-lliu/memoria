@@ -1,6 +1,13 @@
 package com.example.memoria
 
-// Temporary class representing a Post object - feel free to change
-class Post(val title: String, val description: String, val tags: List<String>) {
-    // TODO: Add image to Post and store posts in app
-}
+import android.graphics.Bitmap
+import androidx.room.*
+
+@Entity(tableName = "posts")
+data class Post(@PrimaryKey(autoGenerate = true) val id: Int?,
+                val title: String,
+                val description: String,
+                val creation_time: String,
+                val tags: String,
+                var picturePath: String
+)
