@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".FeedFragment">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/searchview_background"
+        app:queryHint="@string/search_hint"
+        app:iconifiedByDefault="false"
+        app:layout_constraintBottom_toTopOf="@+id/textview_second"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.117" />
+
     <TextView
         android:id="@+id/textview_second"
         android:layout_width="wrap_content"
@@ -84,12 +95,13 @@
                 app:layout_constraintTop_toBottomOf="@id/demo_description"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
     <Button
         android:id="@+id/log_out_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/log_out"
-        app:layout_constraintBottom_toTopOf="@id/search_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/form_entry_button"
         app:layout_constraintTop_toBottomOf="@id/card" />
@@ -99,19 +111,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/new_post_button"
-        app:layout_constraintBottom_toTopOf="@id/search_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/log_out_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card" />
-
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:iconifiedByDefault="false"
-        android:queryHint="Search here"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
     <!-- TODO: add feed post rendering here -->
 

@@ -18,6 +18,7 @@
         android:typeface="sans"
         app:layout_constraintBottom_toTopOf="@+id/loginPrompt"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,11 +72,10 @@
                 android:id="@+id/loginUsername"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:lines="1"
-                android:textSize="14sp"
-                android:inputType="text"
                 android:hint="@string/username_hint"
-                />
+                android:inputType="text"
+                android:lines="1"
+                android:textSize="14sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

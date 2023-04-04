@@ -3,7 +3,7 @@
     <string name="title_activity_main">MainActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="auth_fragment_label">Log In</string>
-    <string name="feed_fragment_label">Feed</string>
+    <string name="feed_fragment_label">Memory Feed</string>
     <string name="form_fragment_label">New Post</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
@@ -35,5 +35,7 @@
     <string name="demo_title">Welcome To Memoria!</string>
     <string name="demo_description">My first Memoria post! Nice sunset :)</string>
     <string name="demo_tags">Tags: sunset, first</string>
+
+    <string name="search_hint">Search for tags...</string>
 
 </resources>
