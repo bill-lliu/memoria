@@ -15,11 +15,6 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.memoria.databinding.FragmentRegisterBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 /**
  * A simple [Fragment] subclass.
  * Use the [RegisterFragment.newInstance] factory method to
@@ -28,10 +23,6 @@ private const val ARG_PARAM2 = "param2"
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
-
-    private var username: EditText? = null
-    private var password: EditText? = null
-    private var email: EditText? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -47,6 +38,7 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -54,48 +46,107 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        username = view.findViewById(R.id.registerUsername)
-        password = view.findViewById<EditText>(R.id.registerPassword)
-
         setupLoginPrompt(view)
+        usernameFocusListener()
+        passwordFocusListener()
+        registerButtonListener()
+    }
 
+    private fun usernameFocusListener() {
+        binding.registerUsername.setOnFocusChangeListener { _, focused ->
+            if (!focused){
+                checkUsername()
+            }
+        }
+    }
+
+    private fun validUsername(): String? {
+        val username = binding.registerUsername.text.toString()
+
+        if (username.contains("^.*[^a-zA-Z\\d].*$".toRegex())){
+            return "Username must only contain alphanumeric characters"
+        }
+
+        if (username.isEmpty()) {
+            return "Username cannot be blank"
+        }
+
+        return ""
+    }
+
+    private fun passwordFocusListener() {
+        binding.registerPassword.setOnFocusChangeListener { _, focused ->
+            if (!focused){
+                checkPassword()
+            }
+        }
+    }
+
+    private fun validPassword(): String? {
+        val password = binding.registerPassword.text.toString()
+
+        if (password.length < 8){
+            return "Password must be at least 8 characters"
+        }
+
+        if (!password.contains("[!#$%^&*]?".toRegex())){
+            return "Password must contain one special character"
+        }
+
+        return ""
+    }
+
+    private fun checkUsername() : Boolean {
+        val usernameError = validUsername()
+        val input = binding.registerUsernameContainer
+
+        if (usernameError != ""){
+            input.isErrorEnabled = true
+            input.error = usernameError
+            return false
+        } else {
+            input.isErrorEnabled = false
+        }
+
+        return true
+    }
+
+    private fun checkPassword() : Boolean {
+        val passwordError = validPassword()
+        val input = binding.registerPasswordContainer
+
+        if (passwordError != ""){
+            input.isErrorEnabled = true
+            input.error = passwordError
+            binding.passwordMin.visibility = View.GONE
+            return false
+        } else {
+            input.isErrorEnabled = false
+        }
+
+        return true
+    }
+
+
+    private fun registerButtonListener() {
         binding.registerButton.setOnClickListener() {
-            val toast = Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_LONG)
-            val isNotEmpty = checkFieldValues(view)
+            val username = binding.registerUsername.text.toString()
+            val password = binding.registerPassword.text.toString()
 
-            if (isNotEmpty) {
-                toast.cancel()
-                findNavController().navigate(R.id.action_registerFragment_to_FeedFragment)
+            val usernameValid = checkUsername()
+            val passwordValid = checkPassword()
+
+            if (usernameValid && passwordValid){
+                registerUser()
             } else {
+                val toast = Toast.makeText(context, "Please fix errors before continuing!", Toast.LENGTH_LONG)
+
                 toast.show()
             }
         }
     }
-    private fun checkFieldValues(view: View) : Boolean {
-        val usernameText = username?.text.toString()
-        val passwordText = password?.text.toString()
-        val emailText = email?.text.toString()
 
-        // Check for valid characters in username
-        if (usernameText.contains("^.*[^a-zA-Z\\d].*$".toRegex())){
-            return false
-        }
-
-        // Check for valid characters in password and for valid length
-        if (passwordText.length < 8 && !passwordText.contains("!#\$%^&*?".toRegex())){
-            return false
-        }
-
-        // Check if username and password are non-empty
-        if (usernameText.isNotEmpty() && passwordText.isNotEmpty() && emailText.isNotEmpty()){
-            return true
-        }
-
-        return false
-    }
-
-    private fun registerUser(view: View){
-
+    private fun registerUser(){
     }
 
     private fun setupLoginPrompt(view: View) {
