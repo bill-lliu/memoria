@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.memoria.databinding.FragmentRegisterBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import org.mindrot.jbcrypt.BCrypt
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 
@@ -162,7 +163,8 @@ class RegisterFragment : Fragment() {
     }
 
     private fun registerUser(username: String, password: String){
-        val newUser = User(null, username, password, "test")
+        val hashedPass = BCrypt.hashpw(password, BCrypt.gensalt())
+        val newUser = User(null, username, hashedPass, DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString())
 
         val userId = runBlocking(Dispatchers.IO) {
             dao.insert(newUser)

@@ -68,6 +68,8 @@
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusBottomEnd="12dp"
             app:hintEnabled="false"
+            app:errorIconDrawable="@null"
+
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -104,6 +106,8 @@
             app:boxCornerRadiusBottomEnd="12dp"
             app:hintEnabled="false"
             app:passwordToggleEnabled="true"
+            app:errorIconDrawable="@null"
+
             >
 
             <com.google.android.material.textfield.TextInputEditText

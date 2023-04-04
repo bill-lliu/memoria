@@ -8,7 +8,7 @@ import java.io.File
 
 @Database(
     entities = [User::class],
-    version = 2
+    version = 1
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getUserDao() : UserDao
@@ -31,7 +31,7 @@ abstract class AppDatabase : RoomDatabase() {
                     appContext,
                     AppDatabase::class.java,
                     File(dataDir, "MemoriaDB.db").toString()
-                ).fallbackToDestructiveMigration().allowMainThreadQueries()
+                ).allowMainThreadQueries()
 
             return builder.build()
         }
