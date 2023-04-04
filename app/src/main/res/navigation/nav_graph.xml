@@ -53,4 +53,7 @@
             android:id="@+id/action_registerFragment_to_LoginFragment"
             app:destination="@id/LoginFragment" />
     </fragment>
+    <action
+        android:id="@+id/action_global_FeedFragment"
+        app:destination="@id/FeedFragment" />
 </navigation>

@@ -1,5 +1,6 @@
 package com.example.memoria
 
+import android.content.Context
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -9,11 +10,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.memoria.databinding.FragmentRegisterBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 /**
  * A simple [Fragment] subclass.
@@ -23,6 +27,8 @@ import com.example.memoria.databinding.FragmentRegisterBinding
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
+    private lateinit var dao: UserDao
+
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -30,7 +36,7 @@ class RegisterFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        dao = AppDatabase.getInstance(requireContext()).getUserDao()
     }
 
     override fun onCreateView(
@@ -60,7 +66,7 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    private fun validUsername(): String? {
+    private fun validUsername(): String {
         val username = binding.registerUsername.text.toString()
 
         if (username.contains("^.*[^a-zA-Z\\d].*$".toRegex())){
@@ -69,6 +75,15 @@ class RegisterFragment : Fragment() {
 
         if (username.isEmpty()) {
             return "Username cannot be blank"
+        }
+
+        val user = runBlocking(Dispatchers.IO) {
+            dao.findOne(username)
+        }
+
+
+        if(user != null) {
+            return "Username already taken"
         }
 
         return ""
@@ -82,7 +97,7 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    private fun validPassword(): String? {
+    private fun validPassword(): String {
         val password = binding.registerPassword.text.toString()
 
         if (password.length < 8){
@@ -137,7 +152,7 @@ class RegisterFragment : Fragment() {
             val passwordValid = checkPassword()
 
             if (usernameValid && passwordValid){
-                registerUser()
+                registerUser(username, password)
             } else {
                 val toast = Toast.makeText(context, "Please fix errors before continuing!", Toast.LENGTH_LONG)
 
@@ -146,7 +161,21 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    private fun registerUser(){
+    private fun registerUser(username: String, password: String){
+        val newUser = User(null, username, password, "test")
+
+        val userId = runBlocking(Dispatchers.IO) {
+            dao.insert(newUser)
+        }
+
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPref.edit()){
+            putString("user_id", userId.toString())
+            putString("authenticated_at", DateTimeFormatter.ISO_INSTANT.format(Instant.now()))
+            apply()
+        }
+
+        findNavController().navigate(R.id.action_registerFragment_to_FeedFragment)
     }
 
     private fun setupLoginPrompt(view: View) {
