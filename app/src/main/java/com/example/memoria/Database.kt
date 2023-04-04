@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import java.io.File
 
 @Database(
     entities = [User::class],
@@ -11,24 +12,29 @@ import androidx.room.RoomDatabase
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getUserDao() : UserDao
-
     companion object {
-        @Volatile
-        private var instance : AppDatabase? = null
-        private var LOCK = Any()
+        private var instance: AppDatabase? = null
 
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
-            instance ?: buildDatabase(context).also {
-                instance = it
+        fun getInstance(context: Context): AppDatabase =
+            instance ?: synchronized(this) {
+                instance ?: buildDatabase(context).also { instance = it }
             }
-        }
 
-        private fun buildDatabase(context: Context) =
-            Room.databaseBuilder(
-                context.applicationContext,
-                AppDatabase::class.java,
-                "MemoriaDatabase.db"
-            ).build()
+        private fun buildDatabase(appContext: Context): AppDatabase {
+            val filesDir = appContext.getExternalFilesDir(null)
+            val dataDir = File(filesDir, "data")
+            if (!dataDir.exists())
+                dataDir.mkdir()
+
+            val builder =
+                Room.databaseBuilder(
+                    appContext,
+                    AppDatabase::class.java,
+                    File(dataDir, "MemoriaDB.db").toString()
+                ).fallbackToDestructiveMigration()
+
+            return builder.build()
+        }
     }
 
 }
