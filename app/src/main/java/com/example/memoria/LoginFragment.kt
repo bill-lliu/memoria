@@ -91,11 +91,15 @@ class LoginFragment : Fragment() {
             dao.findOne(username)
         }
 
+        // User not found in database, error out
         if (user == null){
+            userInput.isErrorEnabled = true
             passInput.isErrorEnabled = true
             passInput.error = "Incorrect username and/or password"
+            return
         } else {
-            passInput.isErrorEnabled  = false
+            passInput.isErrorEnabled = false
+            userInput.isErrorEnabled = false
         }
 
         if (checkPassword(user, password)){
