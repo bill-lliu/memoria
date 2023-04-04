@@ -1,5 +1,6 @@
 package com.example.memoria
 
+import android.content.Context
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -9,16 +10,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.memoria.databinding.FragmentRegisterBinding
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import org.mindrot.jbcrypt.BCrypt
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 /**
  * A simple [Fragment] subclass.
@@ -28,10 +28,8 @@ private const val ARG_PARAM2 = "param2"
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
+    private lateinit var dao: UserDao
 
-    private var username: EditText? = null
-    private var password: EditText? = null
-    private var email: EditText? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -39,7 +37,7 @@ class RegisterFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        dao = AppDatabase.getInstance(requireContext()).getUserDao()
     }
 
     override fun onCreateView(
@@ -47,6 +45,7 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -54,46 +53,131 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        username = view.findViewById(R.id.registerUsername)
-        password = view.findViewById<EditText>(R.id.registerPassword)
-        email = view.findViewById<EditText>(R.id.registerEmail)
-
         setupLoginPrompt(view)
+        usernameFocusListener()
+        passwordFocusListener()
+        registerButtonListener()
+    }
 
+    private fun usernameFocusListener() {
+        binding.registerUsername.setOnFocusChangeListener { _, focused ->
+            if (!focused){
+                checkUsername()
+            }
+        }
+    }
+
+    private fun validUsername(): String {
+        val username = binding.registerUsername.text.toString()
+
+        if (username.contains("^.*[^a-zA-Z\\d].*$".toRegex())){
+            return "Username must only contain alphanumeric characters"
+        }
+
+        if (username.isEmpty()) {
+            return "Username cannot be blank"
+        }
+
+        val user = runBlocking(Dispatchers.IO) {
+            dao.findOne(username)
+        }
+
+
+        if(user != null) {
+            return "Username already taken"
+        }
+
+        return ""
+    }
+
+    private fun passwordFocusListener() {
+        binding.registerPassword.setOnFocusChangeListener { _, focused ->
+            if (!focused){
+                checkPassword()
+            }
+        }
+    }
+
+    private fun validPassword(): String {
+        val password = binding.registerPassword.text.toString()
+
+        if (password.length < 8){
+            return "Password must be at least 8 characters"
+        }
+
+        if (!password.contains("[!#$%^&*]?".toRegex())){
+            return "Password must contain one special character"
+        }
+
+        return ""
+    }
+
+    private fun checkUsername() : Boolean {
+        val usernameError = validUsername()
+        val input = binding.registerUsernameContainer
+
+        if (usernameError != ""){
+            input.isErrorEnabled = true
+            input.error = usernameError
+            return false
+        } else {
+            input.isErrorEnabled = false
+        }
+
+        return true
+    }
+
+    private fun checkPassword() : Boolean {
+        val passwordError = validPassword()
+        val input = binding.registerPasswordContainer
+
+        if (passwordError != ""){
+            input.isErrorEnabled = true
+            input.error = passwordError
+            binding.passwordMin.visibility = View.GONE
+            return false
+        } else {
+            input.isErrorEnabled = false
+        }
+
+        return true
+    }
+
+
+    private fun registerButtonListener() {
         binding.registerButton.setOnClickListener() {
-            val toast = Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_LONG)
-            val isNotEmpty = checkFieldValues(view)
+            val username = binding.registerUsername.text.toString()
+            val password = binding.registerPassword.text.toString()
 
-            if (isNotEmpty) {
-                toast.cancel()
-                findNavController().navigate(R.id.action_registerFragment_to_FeedFragment)
+            val usernameValid = checkUsername()
+            val passwordValid = checkPassword()
+
+            if (usernameValid && passwordValid){
+                registerUser(username, password)
             } else {
+                val toast = Toast.makeText(context, "Please fix errors before continuing!", Toast.LENGTH_LONG)
+
                 toast.show()
             }
         }
     }
-    private fun checkFieldValues(view: View) : Boolean {
-        val usernameText = username?.text.toString()
-        val passwordText = password?.text.toString()
-        val emailText = email?.text.toString()
 
-        // Check for valid characters in username
-        if (usernameText.contains("^.*[^a-zA-Z\\d].*$".toRegex())){
-            return false
+    private fun registerUser(username: String, password: String){
+        val hashedPass = BCrypt.hashpw(password, BCrypt.gensalt())
+        val newUser = User(null, username, hashedPass, DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString())
+
+        val userId = runBlocking(Dispatchers.IO) {
+            dao.insert(newUser)
         }
 
-        // Check for valid characters in password
-
-        // Check if username and password are non-empty
-        if (usernameText.isNotEmpty() && passwordText.isNotEmpty() && emailText.isNotEmpty()){
-            return true
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPref.edit()){
+            putString("user_id", userId.toString())
+            putString("authenticated_at", DateTimeFormatter.ISO_INSTANT.format(Instant.now()))
+            apply()
         }
 
-        return false
-    }
-
-    private fun registerUser(view: View){
-
+        findNavController().navigate(R.id.action_registerFragment_to_FeedFragment)
     }
 
     private fun setupLoginPrompt(view: View) {

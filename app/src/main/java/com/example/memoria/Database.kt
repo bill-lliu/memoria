@@ -31,7 +31,7 @@ abstract class AppDatabase : RoomDatabase() {
                     appContext,
                     AppDatabase::class.java,
                     File(dataDir, "MemoriaDB.db").toString()
-                ).fallbackToDestructiveMigration()
+                ).allowMainThreadQueries()
 
             return builder.build()
         }

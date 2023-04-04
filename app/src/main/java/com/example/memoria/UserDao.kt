@@ -5,13 +5,13 @@ import androidx.room.*
 @Dao
 interface UserDao {
     @Insert
-    fun insert(user: User)
+    fun insert(user: User) : Long
 
     @Update
     fun update(user: User)
 
-    @Query("SELECT * FROM users WHERE username = :username AND password = :password")
-    fun findOne(username: String, password: String) : User
+    @Query("SELECT * FROM users WHERE username = :username")
+    fun findOne(username: String) : User
 
     @Delete
     fun delete(user: User)
