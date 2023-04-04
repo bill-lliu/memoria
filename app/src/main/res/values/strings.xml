@@ -36,6 +36,6 @@
     <string name="demo_description">My first Memoria post! Nice sunset :)</string>
     <string name="demo_tags">Tags: sunset, first</string>
 
-    <string name="search_hint">Search for tags...</string>
+    <string name="search_hint">Search for titles, content, or tags...</string>
 
 </resources>

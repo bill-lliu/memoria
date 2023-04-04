@@ -113,6 +113,10 @@ class FeedFragment : Fragment() {
 
         val cleanedTag = tag.trim().lowercase()
 
-        return allPosts!!.filter { post -> post.tags.contains(cleanedTag) }
+        return allPosts!!.filter {
+                post -> post.title.lowercase().contains(cleanedTag) or
+                post.description.lowercase().contains(cleanedTag) or
+                post.tags.contains(cleanedTag)
+        }
     }
 }
