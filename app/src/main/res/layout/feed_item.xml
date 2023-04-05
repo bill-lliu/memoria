@@ -4,29 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/postTopBar"
+    <TextView
+        android:id="@+id/postTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="4dp">
-        <TextView
-            android:id="@+id/postTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="3dp"
-            android:padding="3dp"
-            android:text="Hello World!"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
-    </LinearLayout>
+        android:layout_gravity="center"
+        android:layout_margin="3dp"
+        android:padding="3dp"
+        android:text="Hello World!"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/postImage"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_below="@id/postTopBar"
+        android:layout_below="@id/postTitle"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop" />
 
@@ -38,7 +31,8 @@
         android:layout_margin="6dp"
         android:padding="5dp"
         android:textColor="@color/black"
-        android:textSize="11sp" />
+        android:textSize="11sp"
+        android:text="Hello World!"/>
 
     <TextView
         android:id="@+id/postTags"
@@ -48,6 +42,7 @@
         android:layout_margin="6dp"
         android:padding="5dp"
         android:textColor="@color/black"
-        android:textSize="11sp" />
+        android:textSize="11sp"
+        android:text="Hello World!"/>
 
 </RelativeLayout>
