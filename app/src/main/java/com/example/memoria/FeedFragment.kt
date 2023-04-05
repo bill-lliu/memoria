@@ -69,6 +69,15 @@ class FeedFragment : Fragment() {
 
         binding.logOutButton.setOnClickListener {
             findNavController().navigate(R.id.action_FeedFragment_to_AuthFragment)
+            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: null
+
+            if (sharedPref != null){
+                with(sharedPref.edit()) {
+                    remove("user_id").commit()
+                    remove("authorized_at").commit()
+                }
+            }
+
         }
         binding.formEntryButton.setOnClickListener {
             findNavController().navigate(R.id.action_FeedFragment_to_FormFragment)
