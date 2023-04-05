@@ -3,8 +3,10 @@ package com.example.memoria
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -26,6 +28,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.example.memoria.databinding.FragmentFeedBinding
 import com.example.memoria.FormViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,6 +47,8 @@ class FeedFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val channelId = "channel1"
 
     private var allPosts: List<Post> = listOf<Post>()
     private var filteredPosts: List<Post> = listOf<Post>()
@@ -70,42 +77,110 @@ class FeedFragment : Fragment() {
 
         loadPosts()
 
+        var savedTime1 = Calendar.getInstance()
+        var savedTime2 = Calendar.getInstance()
+
         binding.changeTimeButton.setOnClickListener {
 
+            // format for hour and minute
             var timeFormat = SimpleDateFormat("hh:mm a", Locale.CANADA)
 
-            val now1 = Calendar.getInstance()
+            // time picker for morning reminder
+            val selectedTime1 = savedTime1
             val timePicker1 = TimePickerDialog(
                 this.context,
                 TimePickerDialog.OnTimeSetListener {
                     view, hourOfDay, minute ->
-                        val selectedTime1 = Calendar.getInstance()
                         selectedTime1.set(Calendar.HOUR_OF_DAY, hourOfDay)
                         selectedTime1.set(Calendar.MINUTE, minute)
                         Toast.makeText(this.context, "Morning Reminder set to: " + timeFormat.format(selectedTime1.time), Toast.LENGTH_SHORT).show()
                 },
-                now1.get(Calendar.HOUR_OF_DAY),
-                now1.get(Calendar.MINUTE),
+                selectedTime1.get(Calendar.HOUR_OF_DAY),
+                selectedTime1.get(Calendar.MINUTE),
                 false
             )
+            savedTime1 = selectedTime1
 
-            val now2 = Calendar.getInstance()
+            // time picker for evening reminder
+            val selectedTime2 = savedTime2
             val timePicker2 = TimePickerDialog(
                 this.context,
                 TimePickerDialog.OnTimeSetListener {
                         view, hourOfDay, minute ->
-                    val selectedTime2 = Calendar.getInstance()
                     selectedTime2.set(Calendar.HOUR_OF_DAY, hourOfDay)
                     selectedTime2.set(Calendar.MINUTE, minute)
-                    Toast.makeText(this.context, "Morning Reminder set to: " + timeFormat.format(selectedTime2.time), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.context, "Evening Reminder set to: " + timeFormat.format(selectedTime2.time), Toast.LENGTH_SHORT).show()
                 },
-                now2.get(Calendar.HOUR_OF_DAY),
-                now2.get(Calendar.MINUTE),
+                selectedTime2.get(Calendar.HOUR_OF_DAY),
+                selectedTime2.get(Calendar.MINUTE),
                 false
             )
+            savedTime2 = selectedTime2
 
-            timePicker1.show()
+            // activate pickers
             timePicker2.show()
+            timePicker1.show()
+
+            // calculates new delays for reminders
+            val currentTime = System.currentTimeMillis()
+            val notificationTimeInMillis1 = selectedTime1.timeInMillis
+            val notificationTimeInMillis2 = selectedTime2.timeInMillis
+            val delayMillis1 = notificationTimeInMillis1 - currentTime
+            val delayMillis2 = notificationTimeInMillis2 - currentTime
+
+            val intent = Intent(this.context, MainActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(this.context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+            val builder1 = this.context?.let { it1 ->
+                NotificationCompat.Builder(it1, channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentTitle("It's a new day!")
+                    .setContentText("You have a new entry available to make!")
+                    .setContentIntent(pendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true)
+            }
+
+            val builder2 = this.context?.let { it1 ->
+                NotificationCompat.Builder(it1, channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentTitle("Don't forget to log today!")
+                    .setContentText("You haven't made an entry yet! How did you spend your time today?")
+                    .setContentIntent(pendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true)
+            }
+
+            val context1 = this.context
+            GlobalScope.launch {
+                delay(delayMillis1)
+                val notificationManager = context1?.let { it1 -> NotificationManagerCompat.from(it1) }
+
+                if (context1?.let { it1 ->
+                        ActivityCompat.checkSelfPermission(
+                            it1,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        )
+                    } != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return@launch
+                }
+                if (notificationManager != null) {
+                    if (builder1 != null) {
+                        notificationManager.notify(0, builder1.build())
+                    }
+                }
+            }
+
+            GlobalScope.launch {
+                delay(delayMillis2)
+                val notificationManager = context1?.let { it1 -> NotificationManagerCompat.from(it1) }
+                if (notificationManager != null) {
+                    if (builder2 != null) {
+                        notificationManager.notify(1, builder2.build())
+                    }
+                }
+            }
 
         }
 
