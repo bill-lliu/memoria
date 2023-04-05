@@ -24,13 +24,12 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="-16dp"
                 android:text="Title:"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:translationY="@dimen/fab_margin"
                 android:typeface="sans"
                 app:layout_constraintBottom_toTopOf="@+id/editTitleContainer"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +46,6 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:textColorHint="#AAAAAA"
-                android:translationY="@dimen/fab_margin"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
@@ -68,8 +66,8 @@
 
             <ImageView
                 android:id ="@+id/picture"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
                 android:src="@drawable/sunset"
                 app:layout_constraintTop_toBottomOf="@+id/editTitleContainer"
                 app:layout_constraintBottom_toTopOf="@+id/barrier"
@@ -92,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:text="Take Pic"
                 android:textSize="12dp"
-                android:layout_marginHorizontal="10dp"
+                android:layout_margin="20dp"
                 app:layout_constraintTop_toBottomOf="@+id/picture"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -105,6 +103,7 @@
                 android:layout_height="wrap_content"
                 android:text="Images"
                 android:textSize="12dp"
+                android:layout_margin="20dp"
                 app:layout_constraintLeft_toRightOf="@id/takePicture"
                 app:layout_constraintTop_toBottomOf="@+id/picture"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -189,7 +188,7 @@
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                app:layout_constraintBottom_toTopOf="@+id/back_to_feed_button"
+                app:layout_constraintBottom_toTopOf="@+id/form_buttons"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description">
@@ -203,16 +202,31 @@
                     android:inputType="textMultiLine"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
-            <Button
-                android:id="@+id/back_to_feed_button"
+
+            <LinearLayout
+                android:id="@+id/form_buttons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="submit"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/editDescriptionContainter"
-                />
+                app:layout_constraintTop_toBottomOf="@id/editDescriptionContainter">
+                <Button
+                    android:id="@+id/back_to_feed_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="submit"
+                    android:layout_margin="20dp"/>
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="cancel"
+                    android:layout_margin="20dp"/>
+
+            </LinearLayout>
+
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

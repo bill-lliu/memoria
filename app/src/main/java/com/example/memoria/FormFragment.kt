@@ -85,8 +85,14 @@ class FormFragment : Fragment() {
                     dao.insert(post)
                 }
                 viewModel.makePost()
+                val toast = Toast.makeText(context, "Post created!", Toast.LENGTH_LONG)
+                toast.show()
                 findNavController().navigate(R.id.action_FormFragment_to_FeedFragment)
             }
+        }
+
+        binding.cancel.setOnClickListener {
+            findNavController().navigate(R.id.action_FormFragment_to_FeedFragment)
         }
 
         val imageView = view.findViewById<ImageView>(R.id.picture)
