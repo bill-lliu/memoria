@@ -16,6 +16,7 @@
     <string name="log_in">Login</string>
     <string name="feed">Welcome to Memoria! Start by making your first post!</string>
     <string name="new_post_button">New Post</string>
+    <string name="change_time_button">Edit Notif</string>
     <string name="back">Back</string>
     <string name="form_title">New Post</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>

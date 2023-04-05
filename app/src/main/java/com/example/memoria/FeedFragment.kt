@@ -88,8 +88,6 @@ class FeedFragment : Fragment() {
             binding.textviewSecond.visibility = View.INVISIBLE
             binding.formEntryButton.isClickable = false
             binding.formEntryButton.alpha = .5f
-            val toast = Toast.makeText(context, "Post created!", Toast.LENGTH_LONG)
-            toast.show()
         })
     }
 
