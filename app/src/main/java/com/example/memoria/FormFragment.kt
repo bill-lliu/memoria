@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -20,9 +19,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.memoria.databinding.FragmentFormBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -72,6 +75,11 @@ class FormFragment : Fragment() {
 
         binding.backToFeedButton.setOnClickListener {
             if(checkValidPost()) {
+                val post = Post(null, binding.editTitle.text.toString(), binding.editDescription.text.toString(), DateTimeFormatter.ISO_INSTANT.format(
+                    Instant.now()).toString(), binding.editTags.text.toString(), currentPhotoPath)
+                val postID = runBlocking(Dispatchers.IO) {
+                    dao.insert(post)
+                }
                 viewModel.makePost()
                 findNavController().navigate(R.id.action_FormFragment_to_FeedFragment)
             }

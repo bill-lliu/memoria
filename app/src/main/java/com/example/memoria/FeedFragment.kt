@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
@@ -19,6 +20,9 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.example.memoria.databinding.FragmentFeedBinding
 import com.example.memoria.FormViewModel
 
@@ -52,8 +56,6 @@ class FeedFragment : Fragment() {
 
         _binding = FragmentFeedBinding.inflate(inflater, container, false)
 
-        loadPosts()
-
         setupSearchView()
 
         return binding.root
@@ -62,6 +64,8 @@ class FeedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        loadPosts()
 
         binding.logOutButton.setOnClickListener {
             findNavController().navigate(R.id.action_FeedFragment_to_AuthFragment)
@@ -73,7 +77,6 @@ class FeedFragment : Fragment() {
         //Observe form to update feed when post is created
         viewModel.postMade.observe(viewLifecycleOwner, Observer { _ ->
             binding.textviewSecond.visibility = View.INVISIBLE
-            binding.card.visibility = View.VISIBLE
             binding.formEntryButton.isClickable = false
             binding.formEntryButton.alpha = .5f
             val toast = Toast.makeText(context, "Post created!", Toast.LENGTH_LONG)
@@ -89,8 +92,18 @@ class FeedFragment : Fragment() {
     private fun loadPosts() {
         // TODO: Load posts here
 
-        allPosts = listOf<Post>()
-        filteredPosts = allPosts
+        val allPosts = dao.loadPosts()
+        if (allPosts.isNotEmpty()) {
+            val intro = view?.findViewById(R.id.textview_second) as TextView
+            intro.visibility = View.GONE
+        }
+        val filteredPosts = allPosts
+        println(filteredPosts)
+        val postsView = view?.findViewById(R.id.postList) as RecyclerView
+        val adapter = PostAdapter(filteredPosts)
+        postsView.adapter = adapter
+        postsView.layoutManager = LinearLayoutManager(context)
+        postsView.visibility = View.VISIBLE
     }
 
     private fun setupSearchView() {
