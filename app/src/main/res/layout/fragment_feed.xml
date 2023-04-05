@@ -11,12 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/searchview_background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_weight="0"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="8dp"
         app:iconifiedByDefault="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.078"
         app:queryHint="@string/search_hint"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="4dp" />
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/textview_second"
