@@ -59,7 +59,7 @@
                     android:id="@+id/editTitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Enter a title describing your entry"
+                    android:hint="Enter a title for your entry!"
                     android:inputType="textShortMessage"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -151,7 +151,7 @@
                     android:id="@+id/editTags"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="april2022, food, android"
+                    android:hint="Enter some tags to label your entry!"
                     android:inputType="textShortMessage"
                     android:textSize="16sp"
                     />
@@ -198,7 +198,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
-                    android:hint="I was working on finishing my ECE452 project today, but then I got hungry and picked up some food..."
+                    android:hint="What did you do today?"
                     android:inputType="textMultiLine"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
