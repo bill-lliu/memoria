@@ -3,6 +3,7 @@ package com.example.memoria
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -25,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.example.memoria.databinding.FragmentFeedBinding
 import com.example.memoria.FormViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -67,6 +70,47 @@ class FeedFragment : Fragment() {
 
         loadPosts()
 
+        binding.changeTimeButton.setOnClickListener {
+
+            var timeFormat = SimpleDateFormat("hh:mm a", Locale.CANADA)
+
+            val now1 = Calendar.getInstance()
+            val timePicker1 = TimePickerDialog(
+                this.context,
+                TimePickerDialog.OnTimeSetListener {
+                    view, hourOfDay, minute ->
+                        val selectedTime1 = Calendar.getInstance()
+                        selectedTime1.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                        selectedTime1.set(Calendar.MINUTE, minute)
+                },
+                now1.get(Calendar.HOUR_OF_DAY),
+                now1.get(Calendar.MINUTE),
+                false
+            )
+
+            val now2 = Calendar.getInstance()
+            val timePicker2 = TimePickerDialog(
+                this.context,
+                TimePickerDialog.OnTimeSetListener {
+                        view, hourOfDay, minute ->
+                    val selectedTime2 = Calendar.getInstance()
+                    selectedTime2.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                    selectedTime2.set(Calendar.MINUTE, minute)
+                },
+                now2.get(Calendar.HOUR_OF_DAY),
+                now2.get(Calendar.MINUTE),
+                false
+            )
+
+            timePicker1.show()
+            timePicker2.show()
+
+        }
+
+        binding.formEntryButton.setOnClickListener {
+            findNavController().navigate(R.id.action_FeedFragment_to_FormFragment)
+        }
+
         binding.logOutButton.setOnClickListener {
             findNavController().navigate(R.id.action_FeedFragment_to_AuthFragment)
             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: null
@@ -78,9 +122,6 @@ class FeedFragment : Fragment() {
                 }
             }
 
-        }
-        binding.formEntryButton.setOnClickListener {
-            findNavController().navigate(R.id.action_FeedFragment_to_FormFragment)
         }
 
         //Observe form to update feed when post is created
