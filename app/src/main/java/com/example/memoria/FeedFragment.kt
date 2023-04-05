@@ -82,6 +82,7 @@ class FeedFragment : Fragment() {
                         val selectedTime1 = Calendar.getInstance()
                         selectedTime1.set(Calendar.HOUR_OF_DAY, hourOfDay)
                         selectedTime1.set(Calendar.MINUTE, minute)
+                        Toast.makeText(this.context, "Morning Reminder set to: " + timeFormat.format(selectedTime1.time), Toast.LENGTH_SHORT).show()
                 },
                 now1.get(Calendar.HOUR_OF_DAY),
                 now1.get(Calendar.MINUTE),
@@ -96,6 +97,7 @@ class FeedFragment : Fragment() {
                     val selectedTime2 = Calendar.getInstance()
                     selectedTime2.set(Calendar.HOUR_OF_DAY, hourOfDay)
                     selectedTime2.set(Calendar.MINUTE, minute)
+                    Toast.makeText(this.context, "Morning Reminder set to: " + timeFormat.format(selectedTime2.time), Toast.LENGTH_SHORT).show()
                 },
                 now2.get(Calendar.HOUR_OF_DAY),
                 now2.get(Calendar.MINUTE),
