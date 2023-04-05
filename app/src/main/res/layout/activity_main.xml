@@ -9,8 +9,8 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.Memoria.AppBarOverlay">
+        android:layout_height="0dp"
+        android:theme="@style/Theme.Memoria.NoActionBar">
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -19,10 +19,10 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="0dp"
         android:background="?attr/colorPrimary"
         app:layout_anchor="@+id/appBarLayout"
         app:layout_anchorGravity="center"
-        app:popupTheme="@style/Theme.Memoria.PopupOverlay" />
+        app:popupTheme="@style/Theme.Memoria.NoActionBar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
