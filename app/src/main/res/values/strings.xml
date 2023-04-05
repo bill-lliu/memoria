@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Memoria</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Memoria</string>
     <!-- Strings used for fragments for navigation -->
     <string name="auth_fragment_label">Log In</string>
     <string name="feed_fragment_label">Memory Feed</string>
