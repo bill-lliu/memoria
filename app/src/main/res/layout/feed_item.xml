@@ -1,51 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="40dp">
 
     <TextView
         android:id="@+id/postTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:gravity="center"
         android:layout_marginStart="3dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="3dp"
         android:layout_marginBottom="3dp"
         android:padding="3dp"
         android:text="Hello World!"
-        android:textColor="@color/black"
+        android:textColor="@color/design_default_color_primary"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/postImage"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_below="@id/postTitle"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop" />
 
-    <TextView
-        android:id="@+id/postDescription"
+    <LinearLayout
+        android:id="@+id/tagsLine"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/postImage"
-        android:layout_margin="6dp"
-        android:padding="5dp"
-        android:textColor="@color/black"
-        android:textSize="11sp"
-        android:text="Hello World!"/>
+        android:layout_below="@id/postImage">
+        <TextView
+            android:id="@+id/tags"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="0dp"
+            android:text="Tags:"
+            android:textColor="@color/design_default_color_primary"
+            android:textSize="16sp" />
+        <TextView
+            android:id="@+id/postTags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:text="Hello World!"
+            android:textColor="@color/design_default_color_secondary"
+            android:textSize="16sp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/postTags"
+    <LinearLayout
+        android:id="@+id/descriptionLine"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/postDescription"
-        android:layout_margin="6dp"
-        android:padding="5dp"
-        android:textColor="@color/black"
-        android:textSize="11sp"
-        android:text="Hello World!"/>
+        android:layout_below="@id/tagsLine">
+        <TextView
+            android:id="@+id/aboutThisDay"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="0dp"
+            android:text="About This Day:"
+            android:textColor="@color/design_default_color_primary"
+            android:textSize="16sp" />
+        <TextView
+            android:id="@+id/postDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:text="Hello World!"
+            android:textColor="@color/design_default_color_secondary"
+            android:textSize="16sp" />
+    </LinearLayout>
 
 </RelativeLayout>
