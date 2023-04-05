@@ -107,7 +107,7 @@ class RegisterFragment : Fragment() {
             return "Password must be at least 8 characters"
         }
 
-        if (!password.contains("[!#$%^&*]?".toRegex())){
+        if (!password.contains("^.*[!#$%^&*].*$".toRegex())){
             return "Password must contain one special character"
         }
 
