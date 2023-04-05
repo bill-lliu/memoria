@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -15,14 +16,17 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.FileProvider
+import androidx.core.graphics.PathUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.memoria.databinding.FragmentFormBinding
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.format.DateTimeFormatter
@@ -97,6 +101,15 @@ class FormFragment : Fragment() {
             imageView.visibility = View.VISIBLE
         }
 
+        val getStorageAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            val usethis = it?.data?.data?.let { it1 -> context?.contentResolver?.openInputStream(it1) }
+            val bitmap = BitmapFactory.decodeStream(usethis)
+            imageView.setImageBitmap(bitmap)
+            imageView.visibility = View.VISIBLE
+
+            val path = createImageFile()
+            path.writeBitmap(bitmap, Bitmap.CompressFormat.JPEG, 100)
+        }
         val requestCamera = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it) {
                 Toast.makeText(context, "Permission not Granted", Toast.LENGTH_SHORT).show()
@@ -151,7 +164,7 @@ class FormFragment : Fragment() {
                 //TODO: need to update the way to grab image from external media
                 val storageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 if(storageIntent.resolveActivity(requireContext().packageManager) != null){
-                    getAction.launch(storageIntent)
+                    getStorageAction.launch(storageIntent)
                 }
             }else {
 
@@ -223,6 +236,12 @@ class FormFragment : Fragment() {
         return true
     }
 
+    private fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
+        outputStream().use { out ->
+            bitmap.compress(format, quality, out)
+            out.flush()
+        }
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of
