@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/postTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="3dp"
+        android:padding="3dp"
+        android:text="Hello World!"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/postImage"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@id/postTitle"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/postDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/postImage"
+        android:layout_margin="6dp"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textSize="11sp"
+        android:text="Hello World!"/>
+
+    <TextView
+        android:id="@+id/postTags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/postDescription"
+        android:layout_margin="6dp"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textSize="11sp"
+        android:text="Hello World!"/>
+
+</RelativeLayout>
