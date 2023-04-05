@@ -99,7 +99,8 @@ class FeedFragment : Fragment() {
     }
 
     private fun loadPosts() {
-        allPosts = dao.loadPosts()
+        allPosts = dao.loadPosts().reversed()
+
         if (allPosts!!.isNotEmpty()) {
             val intro = view?.findViewById(R.id.textview_second) as TextView
             intro.visibility = View.GONE
@@ -107,7 +108,7 @@ class FeedFragment : Fragment() {
         filteredPosts = allPosts
         println(filteredPosts)
         val postsView = view?.findViewById(R.id.postList) as RecyclerView
-        val adapter = PostAdapter(filteredPosts)
+        val adapter = filteredPosts?.let { PostAdapter(it) }
         postsView.adapter = adapter
         postsView.layoutManager = LinearLayoutManager(context)
         postsView.visibility = View.VISIBLE
