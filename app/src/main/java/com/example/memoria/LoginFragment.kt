@@ -36,6 +36,8 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dao = AppDatabase.getInstance(requireContext()).getUserDao()
+        checkIfLoggedIn()
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +54,13 @@ class LoginFragment : Fragment() {
         onInputFocus()
 
         binding.loginButton.setOnClickListener() {
+            binding.loginUsername.isEnabled = false
+            binding.loginPassword.isEnabled = false
+
             retrieveUser()
+
+            binding.loginUsername.isEnabled = true
+            binding.loginPassword.isEnabled = true
         }
     }
 
@@ -145,6 +153,18 @@ class LoginFragment : Fragment() {
         val textView = view.findViewById<TextView>(R.id.registerPrompt)
         textView.text = registerPrompt
         textView.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun checkIfLoggedIn(): Boolean {
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return false
+
+        val user = sharedPref.getString("user_id", "")
+
+        if (user != ""){
+            findNavController().navigate(R.id.action_global_FeedFragment)
+        }
+
+        return false
     }
 
 //    private fun setupForgotPassword(view: View) {

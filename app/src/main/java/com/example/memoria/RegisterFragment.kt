@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.memoria.databinding.FragmentRegisterBinding
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +39,7 @@ class RegisterFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dao = AppDatabase.getInstance(requireContext()).getUserDao()
+        checkIfLoggedIn()
     }
 
     override fun onCreateView(
@@ -146,6 +148,8 @@ class RegisterFragment : Fragment() {
 
     private fun registerButtonListener() {
         binding.registerButton.setOnClickListener() {
+            binding.registerUsername.isEnabled = false
+            binding.registerPassword.isEnabled = false
             val username = binding.registerUsername.text.toString()
             val password = binding.registerPassword.text.toString()
 
@@ -159,6 +163,8 @@ class RegisterFragment : Fragment() {
 
                 toast.show()
             }
+            binding.registerUsername.isEnabled = true
+            binding.registerPassword.isEnabled = true
         }
     }
 
@@ -194,6 +200,17 @@ class RegisterFragment : Fragment() {
         val textView = view.findViewById<TextView>(R.id.alreadyHaveAccountPrompt)
         textView.text = loginPrompt
         textView.movementMethod = LinkMovementMethod.getInstance()
+    }
+    private fun checkIfLoggedIn(): Boolean {
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return false
+
+        val user = sharedPref.getString("user_id", "")
+
+        if (user != ""){
+            findNavController().navigate(R.id.action_global_FeedFragment)
+        }
+
+        return false
     }
 
     override fun onDestroyView() {
