@@ -40,8 +40,8 @@ class FeedFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private var allPosts: List<Post>? = null
-    private var filteredPosts: List<Post>? = null
+    private var allPosts: List<Post> = listOf<Post>()
+    private var filteredPosts: List<Post> = listOf<Post>()
     
     private val viewModel: FormViewModel by activityViewModels()
 
@@ -99,14 +99,12 @@ class FeedFragment : Fragment() {
     }
 
     private fun loadPosts() {
-        // TODO: Load posts here
-
-        val allPosts = dao.loadPosts()
-        if (allPosts.isNotEmpty()) {
+        allPosts = dao.loadPosts()
+        if (allPosts!!.isNotEmpty()) {
             val intro = view?.findViewById(R.id.textview_second) as TextView
             intro.visibility = View.GONE
         }
-        val filteredPosts = allPosts
+        filteredPosts = allPosts
         println(filteredPosts)
         val postsView = view?.findViewById(R.id.postList) as RecyclerView
         val adapter = PostAdapter(filteredPosts)
@@ -115,30 +113,44 @@ class FeedFragment : Fragment() {
         postsView.visibility = View.VISIBLE
     }
 
+    private fun updatePosts(query: String?) {
+        filteredPosts = getPosts(query)
+
+        val newAdapter = PostAdapter(filteredPosts)
+        val postsView = view?.findViewById(R.id.postList) as RecyclerView
+        postsView.adapter = newAdapter
+        postsView.layoutManager = LinearLayoutManager(context)
+        postsView.visibility = View.VISIBLE
+    }
+
     private fun setupSearchView() {
         binding.searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                filteredPosts = getPosts(query)
-                return true
+                return false
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
+            override fun onQueryTextChange(query: String?): Boolean {
+                updatePosts(query)
+                return true
             }
         })
     }
 
-    private fun getPosts(tag: String?): List<Post> {
-        if (tag == null || allPosts == null) {
-            return allPosts ?: listOf<Post>()
+    private fun getPosts(searchTerm: String?): List<Post> {
+        if (allPosts.isEmpty()) {
+            return listOf<Post>()
         }
 
-        val cleanedTag = tag.trim().lowercase()
+        if (searchTerm == null) {
+            return allPosts
+        }
+
+        val cleanedTerm = searchTerm.trim().lowercase()
 
         return allPosts!!.filter {
-                post -> post.title.lowercase().contains(cleanedTag) or
-                post.description.lowercase().contains(cleanedTag) or
-                post.tags.contains(cleanedTag)
+                post -> post.title.lowercase().contains(cleanedTerm) or
+                post.description.lowercase().contains(cleanedTerm) or
+                post.tags.contains(cleanedTerm)
         }
     }
 }
