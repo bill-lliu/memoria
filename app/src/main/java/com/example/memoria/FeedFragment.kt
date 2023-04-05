@@ -48,7 +48,7 @@ class FeedFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val channelId = "channel1"
+    private val channelId = "channel2"
 
     private var allPosts: List<Post> = listOf<Post>()
     private var filteredPosts: List<Post> = listOf<Post>()
